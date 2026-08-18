@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{a1b2c3d4-e5f6-7890-abcd-ef1234567890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{a2b3c4d5-e6f7-8901-bcde-f12345678901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\net">
+      <UniqueIdentifier>{a3b4c5d6-f7a8-9012-cdef-123456789012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\hook">
+      <UniqueIdentifier>{a4b5c6d7-f8a9-0123-defa-234567890123}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="src\exports.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\config.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\control.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\proxy_config.example.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\logger.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\utils.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\socks5.hpp">
+      <Filter>src\net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hook\hooks.hpp">
+      <Filter>src\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hook\tcp.hpp">
+      <Filter>src\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hook\udp.hpp">
+      <Filter>src\hook</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="src\exports.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\config.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\control.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\logger.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utils.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\socks5.cpp">
+      <Filter>src\net</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hook\hooks.cpp">
+      <Filter>src\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hook\tcp.cpp">
+      <Filter>src\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hook\udp.cpp">
+      <Filter>src\hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hook\process.cpp">
+      <Filter>src\hook</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

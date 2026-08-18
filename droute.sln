@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37111.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "droute", "droute\droute.vcxproj", "{828C8590-E0A0-4682-A8B9-AF390FEC0340}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libMinHook", "external\minhook\build\VC17\libMinHook.vcxproj", "{F142A341-5EE0-442D-A15F-98AE9B48DBAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "installer", "installer\installer.csproj", "{DB4992B0-6C03-432E-A25A-77A8C4C424F8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{828C8590-E0A0-4682-A8B9-AF390FEC0340} = {828C8590-E0A0-4682-A8B9-AF390FEC0340}
+		{9CDE44E6-5189-447C-B8F0-2E8704409468} = {9CDE44E6-5189-447C-B8F0-2E8704409468}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "updaterHook", "updaterHook\updaterHook.csproj", "{9CDE44E6-5189-447C-B8F0-2E8704409468}"
+	ProjectSection(ProjectDependencies) = postProject
+		{828C8590-E0A0-4682-A8B9-AF390FEC0340} = {828C8590-E0A0-4682-A8B9-AF390FEC0340}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deps", "deps", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{3B9A078A-7068-4DFB-B44A-0C32FAF7F931}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{828C8590-E0A0-4682-A8B9-AF390FEC0340}.Debug|x64.ActiveCfg = Debug|x64
+		{828C8590-E0A0-4682-A8B9-AF390FEC0340}.Debug|x64.Build.0 = Debug|x64
+		{828C8590-E0A0-4682-A8B9-AF390FEC0340}.Release|x64.ActiveCfg = Release|x64
+		{828C8590-E0A0-4682-A8B9-AF390FEC0340}.Release|x64.Build.0 = Release|x64
+		{F142A341-5EE0-442D-A15F-98AE9B48DBAE}.Debug|x64.ActiveCfg = Debug|x64
+		{F142A341-5EE0-442D-A15F-98AE9B48DBAE}.Debug|x64.Build.0 = Debug|x64
+		{F142A341-5EE0-442D-A15F-98AE9B48DBAE}.Release|x64.ActiveCfg = Release|x64
+		{F142A341-5EE0-442D-A15F-98AE9B48DBAE}.Release|x64.Build.0 = Release|x64
+		{DB4992B0-6C03-432E-A25A-77A8C4C424F8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DB4992B0-6C03-432E-A25A-77A8C4C424F8}.Debug|x64.Build.0 = Debug|Any CPU
+		{DB4992B0-6C03-432E-A25A-77A8C4C424F8}.Release|x64.ActiveCfg = Release|Any CPU
+		{DB4992B0-6C03-432E-A25A-77A8C4C424F8}.Release|x64.Build.0 = Release|Any CPU
+		{9CDE44E6-5189-447C-B8F0-2E8704409468}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9CDE44E6-5189-447C-B8F0-2E8704409468}.Debug|x64.Build.0 = Debug|Any CPU
+		{9CDE44E6-5189-447C-B8F0-2E8704409468}.Release|x64.ActiveCfg = Release|Any CPU
+		{9CDE44E6-5189-447C-B8F0-2E8704409468}.Release|x64.Build.0 = Release|Any CPU
+		{3B9A078A-7068-4DFB-B44A-0C32FAF7F931}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3B9A078A-7068-4DFB-B44A-0C32FAF7F931}.Debug|x64.Build.0 = Debug|Any CPU
+		{3B9A078A-7068-4DFB-B44A-0C32FAF7F931}.Release|x64.ActiveCfg = Release|Any CPU
+		{3B9A078A-7068-4DFB-B44A-0C32FAF7F931}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F142A341-5EE0-442D-A15F-98AE9B48DBAE} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{3B9A078A-7068-4DFB-B44A-0C32FAF7F931} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {04ED8E87-258C-4E25-A2D2-ED6BDB66E69D}
+	EndGlobalSection
+EndGlobal

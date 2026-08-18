@@ -1,0 +1,10 @@
+{
+  "_comment": "Gerado pelo DeviceIdentity real do cliente Windows. Nao editar a mao: ver server/README.md.",
+  "generated_utc": "2026-08-18T01:22:30Z",
+  "runtime": "4.0.30319.42000",
+  "device_id": "afee51d18cdd080d8d30770564e0f515",
+  "public_key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4xPuJjotK8PeyAif046y0wCUHknAqEWRaNIiMWXULmyh1oXUbtbz2eMEmdhkP/fWnGRdTenTc6xASumCEq+cPA==",
+  "nonce": "9f2c41ab7d0e5638c1740bb2e9a35d86",
+  "signature": "EQkxUfUS7fpYwp5XXlfGUrtdDldQ7eNar/aYDANJ2l9HeXdHUNFzvZixapsbEt5ti/sHtuh2wqJtLv+HFuZrSA==",
+  "signature_second": "5f7Zx6ebKgmAm+OWZPeXpUkVsDNlM0fxAg2/QrbVnJFw9jevktr8eaRqlchwG++94CRseLyAnYD/GSgFCVpyNw=="
+}

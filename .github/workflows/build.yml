@@ -1,0 +1,113 @@
+name: Build public source
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify source package
+        shell: pwsh
+        env:
+          # Optional repository secret: a comma separated list of strings that
+          # must never appear in the tree or in a build. Absent, the shape based
+          # checks in the script still run on their own.
+          LIBERAR_VERIFY_FORBIDDEN: ${{ secrets.VERIFY_FORBIDDEN_STRINGS }}
+        run: ./scripts/verify-public.ps1
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.6'
+          cache-dependency-path: server/broker/go.sum
+
+      - name: Test and build broker
+        shell: pwsh
+        run: |
+          Push-Location server/broker
+          go test ./...
+          go vet ./...
+          go run golang.org/x/vuln/cmd/govulncheck@v1.7.0 ./...
+          $env:CGO_ENABLED = '0'
+          $env:GOOS = 'linux'
+          $env:GOARCH = 'amd64'
+          go build -trimpath -ldflags="-s -w" -o ../droute-broker .
+          Pop-Location
+          bash -n server/install-node.sh server/reaper.sh
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: msbuild droute.sln /t:Restore /p:Configuration=Release /p:Platform=x64
+
+      - name: Build Release x64
+        run: msbuild droute.sln /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TargetFrameworkVersion=v4.8 /p:RestorePackages=false
+
+      - name: Verify outputs and embedded strings
+        shell: pwsh
+        env:
+          LIBERAR_VERIFY_FORBIDDEN: ${{ secrets.VERIFY_FORBIDDEN_STRINGS }}
+        run: |
+          $errors = @()
+          $exe = "installer/bin/Release/liberar.live.exe"
+          $nativeCopies = @(
+            "dist/x64/Release/droute_64.dll",
+            "installer/Resources/droute_64.dll",
+            "updaterHook/Resources/droute_64.dll"
+          )
+
+          if (!(Test-Path $exe)) {
+            $errors += "liberar.live.exe was not produced."
+          }
+          foreach ($path in $nativeCopies) {
+            if (!(Test-Path $path)) {
+              $errors += "$path was not produced."
+            }
+          }
+          if ($errors.Count -eq 0) {
+            $hashes = $nativeCopies | ForEach-Object {
+              (Get-FileHash $_ -Algorithm SHA256).Hash
+            } | Select-Object -Unique
+            if ($hashes.Count -ne 1) {
+              $errors += "Native payload copies do not match."
+            }
+          }
+          if ($errors.Count) {
+            $errors | ForEach-Object { Write-Error $_ }
+            exit 1
+          }
+
+          ./scripts/verify-public.ps1 -AllowBuildArtifacts
+
+      - name: Prepare transparent reference build
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path public-package | Out-Null
+          Copy-Item installer/bin/Release/liberar.live.exe public-package/liberar.live.exe
+          Copy-Item README.md public-package/README.md
+          Copy-Item LICENSE.txt public-package/LICENSE.txt
+          Copy-Item THIRD-PARTY-NOTICES.md public-package/THIRD-PARTY-NOTICES.md
+          Copy-Item third_party/webview2/LICENSE.txt public-package/WEBVIEW2-LICENSE.txt
+          @"
+          This reference build contacts only localhost by default and has no web panel.
+          It contains no operational endpoint, proxy address or credential.
+          Configure your own broker as described in docs/BUILDING.md.
+          "@ | Set-Content public-package/PUBLIC-BUILD.txt -Encoding UTF8
+
+      - name: Upload reference build
+        uses: actions/upload-artifact@v4
+        with:
+          name: liberar.live-public-reference
+          path: public-package/
+          if-no-files-found: error

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+
+		<ItemGroup>
+			<InputAssemblies Include="$(OutputPath)$(TargetName)$(TargetExt)" />
+			<InputAssemblies Include="$(OutputPath)0Harmony.dll" />
+			<InputAssemblies Include="$(OutputPath)Droute.Core.dll" />
+			<InputAssemblies Include="$(OutputPath)AsmResolver.dll" />
+			<InputAssemblies Include="$(OutputPath)AsmResolver.PE.dll" />
+			<InputAssemblies Include="$(OutputPath)AsmResolver.PE.File.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.Backports.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.ILHelpers.dll" />
+			<AllOutputFiles Include="$(OutputPath)*.*" />
+			<FilesToDelete Include="@(AllOutputFiles)" Exclude="$(OutputPath)$(TargetName)$(TargetExt)" />
+		</ItemGroup>
+
+		<ILRepack
+			Parallel="true"
+			Internalize="false"
+			Union="true"
+			AllowDuplicateResources="true"
+			InputAssemblies="@(InputAssemblies)"
+			TargetKind="SameAsPrimaryAssembly"
+			OutputFile="$(OutputPath)$(TargetName)$(TargetExt)"
+			LibraryPath="$(OutputPath)"
+		/>
+
+		<Delete Files="@(FilesToDelete)" />
+
+	</Target>
+
+	<Target Name="CopyToInstallerResources" AfterTargets="Build">
+		<MakeDir Directories="$(MSBuildProjectDirectory)\..\installer\Resources" Condition="!Exists('$(MSBuildProjectDirectory)\..\installer\Resources')" />
+		<Copy SourceFiles="$(OutputPath)$(TargetName)$(TargetExt)" DestinationFolder="$(MSBuildProjectDirectory)\..\installer\Resources" />
+	</Target>
+</Project>

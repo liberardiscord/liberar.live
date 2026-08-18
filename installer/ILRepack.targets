@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+
+		<ItemGroup>
+			<InputAssemblies Include="$(OutputPath)$(TargetName)$(TargetExt)" />
+			<InputAssemblies Include="$(OutputPath)Droute.Core.dll" />
+			<InputAssemblies Include="$(OutputPath)AsmResolver.dll" />
+			<InputAssemblies Include="$(OutputPath)AsmResolver.PE.dll" />
+			<InputAssemblies Include="$(OutputPath)AsmResolver.PE.File.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.Backports.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.ILHelpers.dll" />
+		</ItemGroup>
+
+        <ILRepack
+            Parallel="true"
+            Internalize="true"
+            InputAssemblies="@(InputAssemblies)"
+            TargetKind="SameAsPrimaryAssembly"
+            OutputFile="$(OutputPath)$(TargetName)$(TargetExt)"
+            LibraryPath="$(OutputPath)"
+        />
+
+        <!-- WebView2 is deliberately absent from the merge: ILRepack internalizes
+             what it merges, and those types are reached through COM interop, which
+             breaks. They ride inside the exe as resources instead and are handed
+             back by the resolver in Program.Main, so the output is still one file. -->
+        <ItemGroup>
+            <FilesToDelete Include="$(OutputPath)*.dll" />
+        </ItemGroup>
+        <Delete Files="@(FilesToDelete)" />
+
+        <!-- The WebView2 package drops native loaders here for every architecture.
+             None of them are used: the one we need is written out at runtime from
+             a resource. Leaving the folder behind would make the output look like
+             something that has to be shipped as a directory. -->
+        <RemoveDir Directories="$(OutputPath)runtimes" />
+    </Target>
+</Project>

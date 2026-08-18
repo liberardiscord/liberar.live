@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DB4992B0-6C03-432E-A25A-77A8C4C424F8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Droute.Installer</RootNamespace>
+    <AssemblyName>liberar.live</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Other\liberar.live.ico</ApplicationIcon>
+    <WebView2PackageVersion>1.0.4129.50</WebView2PackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>$(WebView2PackageVersion)</Version>
+    </PackageReference>
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task">
+      <Version>2.0.45</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\BrokerClient.cs" />
+    <Compile Include="Classes\BrokerConfig.cs" />
+    <Compile Include="Classes\CliLogger.cs" />
+    <Compile Include="Classes\DeviceIdentity.cs" />
+    <Compile Include="Classes\DiscordTools.cs" />
+    <Compile Include="Classes\PatchTools.cs" />
+    <Compile Include="Classes\PainelAnuncio.cs" />
+    <Compile Include="Classes\RuntimeToggle.cs" />
+    <Compile Include="Classes\Tema.cs" />
+    <Compile Include="Classes\Icones.cs" />
+    <Compile Include="Classes\Verificacao.cs" />
+    <Compile Include="Forms\Controles.cs" />
+    <Compile Include="Forms\CartaoEstado.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\BlocoVerificacao.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Janelas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SimpleMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="ILRepack.targets" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Resources\Update.exe.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Other\liberar.live.ico" />
+    <Content Include="Other\liberar.live.png" />
+    <None Include="Resources\Droute.UpdaterHook.dll" />
+    <Content Include="Resources\droute_64.dll" />
+    <Content Include="Resources\WebView2Loader.dll" />
+    <Content Include="Resources\Microsoft.Web.WebView2.Core.dll" />
+    <Content Include="Resources\Microsoft.Web.WebView2.WinForms.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\core\core.csproj">
+      <Project>{3b9a078a-7068-4dfb-b44a-0c32faf7f931}</Project>
+      <Name>core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Target Name="StageWebView2PublicResources" BeforeTargets="CoreResGen">
+    <PropertyGroup>
+      <WebView2PackageDir>$(NuGetPackageRoot)microsoft.web.webview2\$(WebView2PackageVersion)\</WebView2PackageDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <WebView2ManagedResource Include="$(WebView2PackageDir)lib\net462\Microsoft.Web.WebView2.Core.dll" />
+      <WebView2ManagedResource Include="$(WebView2PackageDir)lib\net462\Microsoft.Web.WebView2.WinForms.dll" />
+      <WebView2NativeResource Include="$(WebView2PackageDir)build\native\x64\WebView2Loader.dll" />
+    </ItemGroup>
+    <Error Condition="!Exists('%(WebView2ManagedResource.Identity)')" Text="WebView2 managed resource missing. Restore NuGet packages before building." />
+    <Error Condition="!Exists('%(WebView2NativeResource.Identity)')" Text="WebView2 x64 loader missing. Restore NuGet packages before building." />
+    <Copy SourceFiles="@(WebView2ManagedResource);@(WebView2NativeResource)" DestinationFolder="$(ProjectDir)Resources" SkipUnchangedFiles="true" />
+  </Target>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

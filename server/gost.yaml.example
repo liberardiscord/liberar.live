@@ -1,0 +1,89 @@
+# Exemplo de servidor SOCKS5 com autenticação efêmera.
+#
+# Substitui o antigo danted.conf.example. O motivo da troca é uma limitação
+# concreta do Dante: `socksmethod: username` resolve contra usuários do sistema,
+# e credencial que nasce e morre a cada cinco minutos não pode virar conta de
+# sistema. O gost aceita um plugin de autenticação, então cada conexão é
+# validada pelo broker, que consulta o Redis onde a credencial foi gravada com
+# TTL real.
+#
+# Este arquivo não contém host, credencial nem qualquer valor operacional.
+
+services:
+  # Este nome identifica o nó no pool do broker. Ele deve ser idêntico ao lado
+  # esquerdo da entrada correspondente em BROKER_PROXY_NODES e ao
+  # PROXY_NODE_NAME usado pelo reaper desta máquina.
+  - name: socks5
+    # IPv4 explícito, não ":1080". Um listener dual-stack ([::]) reporta os
+    # pares como IPv4-mapeado (::ffff:192.0.2.4), enquanto o broker guarda o IP
+    # de origem em forma plana (192.0.2.4). O reaper compara os dois: sob
+    # dual-stack nenhum socket vivo casaria com a lista de ativos, e ele
+    # derrubaria todo usuário legítimo a cada passada. Ver server/reaper.sh.
+    addr: "0.0.0.0:1080"
+
+    # Recusa destinos que não deveriam sair por este nó. Ver o bypass abaixo.
+    bypass: private-networks
+
+    # Limite de conexões simultâneas por endereço de origem. É a primeira
+    # barreira contra um cliente que tente usar o nó como relay aberto; o teto
+    # por credencial é aplicado pelo broker.
+    climiter: per-client
+
+    handler:
+      type: socks5
+      auther: broker
+      metadata:
+        # Sem isto o UDP ASSOCIATE não é oferecido, e voz e vídeo não passam.
+        udp: true
+        udpBufferSize: 4096
+        readTimeout: 30s
+    listener:
+      type: tcp
+
+authers:
+  - name: broker
+    plugin:
+      type: http
+      # No primeiro nó, com broker local, mantenha loopback. Nós adicionais devem
+      # usar o IP privado/WireGuard do broker; nunca publique este endpoint na
+      # Internet, pois ele é um oráculo de validação de credencial.
+      addr: http://127.0.0.1:8000/socks-auth
+      timeout: 3s
+
+bypasses:
+  # Sem `whitelist: true` a lista é de negação: tudo que casar é recusado.
+  # Impede que o proxy seja usado para alcançar a rede interna do provedor,
+  # serviços de metadados de nuvem e a própria máquina.
+  - name: private-networks
+    matchers:
+      - 0.0.0.0/8
+      - 10.0.0.0/8
+      - 100.64.0.0/10
+      - 127.0.0.0/8
+      - 169.254.0.0/16
+      - 172.16.0.0/12
+      - 192.0.0.0/24
+      - 192.168.0.0/16
+      - 198.18.0.0/15
+      - 224.0.0.0/4
+      - 240.0.0.0/4
+      - "::1/128"
+      - "fc00::/7"
+      - "fe80::/10"
+
+climiters:
+  - name: per-client
+    limits:
+      # Sem uma entrada "$", o GOST não impõe teto global próprio. O limite
+      # efetivo passa a ser o conjunto de systemd, kernel, CPU, RAM e rede.
+      # "$$" continua sendo o teto pretendido por IP de origem.
+      - "$$ 128"
+
+log:
+  level: info
+  format: json
+  output: stderr
+
+# Bloqueio de portas de abuso (25/SMTP em primeiro lugar) pertence ao firewall
+# da máquina, não a este arquivo: um erro de digitação aqui falha aberto,
+# enquanto uma regra de saída no nftables falha fechada. Ver docs/PROXY-SERVER.md.
