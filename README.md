@@ -1,13 +1,13 @@
 # liberar.live
 
-o liberar.live faz só o Discord sair por um servidor nos Estados Unidos, o resto
+o [liberar.live](https://liberar.live/) faz só o Discord sair por um servidor nos Estados Unidos, o resto
 do computador continua como estava, sem VPN ligada no sistema e sem proxy
 global. por baixo são duas coisas simples: `SOCKS5 CONNECT` para o tráfego
 normal e `SOCKS5 UDP ASSOCIATE` para voz e vídeo.
 
-aqui está o programa do Windows e o servidor que entrega as credenciais
-temporárias, não está aqui o site, a infraestrutura de produção, segredo nenhum,
-nem executável pronto para baixar.
+aqui está o open-source do programa do Windows e do servidor que entrega as credenciais
+temporárias, isto é pra devs, se quiser utilizar o programa visite:
+[liberar.live](https://liberar.live/)
 
 ## já vem seguro
 
